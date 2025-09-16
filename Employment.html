@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inclusive Employment</title>
+</head>
+<style>
+    body{
+        background-color: white;
+        margin-top: 50px; /* adjust based on your header's height */
+        overflow: scroll;
+    }
+    #topnavbar{
+        background-color: whitesmoke;
+        height: 125px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        opacity: 1;
+        padding-top: 20px;  
+        z-index: 9999;
+    }
+    #logo{
+        position:fixed;
+        top: 15px;
+        left: 50px;
+    }
+    .topnavstuff{
+        position:fixed;
+        top: 70px;
+    }
+    #homepage{
+        left: 300px;
+    }
+    #services{
+        left: 420px;
+    }
+    #aboutus{
+        left:600px;
+    }
+    #employment{
+        left:710px;
+    }
+    #contact{
+        left:950px;
+    }
+    .topnavlinks{
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.3s ease;
+        color:black;
+        font-size: 20px;
+        position:fixed;
+        top: 70px;
+    }
+    .topnavlinks:hover{
+        color: blueviolet;
+        text-decoration: none;
+        transform: scale(1.1);
+    }
+    #employmentform{
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* spacing between elements */
+        max-width: 500px !important; /* optional: limits width */
+        background-color: #215C98;
+        margin-right: 30px;
+    }
+    #text{
+        margin-left: 100px;
+        width: 1000px;
+    }
+    .paragraph{
+        font-size: larger;
+        max-width: 90%;
+    }
+    #employmentform input,
+    #employmentform label,
+    #employmentform textarea {
+        width: 80%;  /* make inputs fill container */
+        box-sizing: border-box; /* includes padding in width */
+        align-self: center;
+        margin-top: 10px;
+    }
+    #form{
+        width: 800px;
+        background-color: azure;
+    }
+    #employment-form {
+        display: flex;
+        justify-content: space-between; /* Positions content side by side */
+        background-color: aliceblue;
+    }
+    #employmentform button[type="submit"] {
+        width: fit-content;
+        align-self: flex-start;
+        padding: 8px 16px;
+        background-color: #3281db;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        align-self: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    #employmentform button[type="submit"]:hover {
+        background-color: #2a6bb6;
+        transform: scale(1.1);
+    }
+    footer{
+        background-color: whitesmoke;
+        margin-top: 50px;
+        text-align: center;
+        padding: 10px;
+    }
+    footer a{
+        margin-bottom: 10px;
+        display: inline-block; /* To allow margin to apply properly */
+        color: blue;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <div style="height: 100px;"></div>
+    <div id="topnavbar">
+        <div id="logo"><a href="Home.html"><img src="logo.png" alt="Website Logo" width = 105px height = 105px></a></div>
+        <div class="topnavstuff" id="homepage"><a href= "Home.html" class="topnavlinks">Home</a></div>
+        <div class="topnavstuff" id="services"><a href="Services and Fees.html" class="topnavlinks">Services and Fees</a></div>
+        <div class="topnavstuff" id="aboutus"><a href = "About us.html" class="topnavlinks">About Us</a></div>
+        <div class="topnavstuff" id="employment"><a href='Employment.html' class="topnavlinks">Inclusive Employment</a></div>
+        <div class="topnavstuff" id="contact"><a href="Contact Us.html" class="topnavlinks">Contact Us</a></div>
+        <hr style="border: none; height: 4px; background-color: darkblue; margin-top: 105px;">
+    </div>
+
+    <div id="employment-form">
+
+        <div id="text">
+            <h1><strong>Inclusive Employment</h1>
+            <p class="paragraph">
+            At Balance Works LLP, we believe that diverse perspectives create stronger solutions. We’re committed to building a workplace where everyone — regardless of background, ability, or life stage — feels valued, supported, and empowered to thrive.
+            </p>
+            <p class="paragraph">
+            We welcome team members from all walks of life, including parents returning to work, career switchers, and individuals seeking flexible roles. Our hiring practices prioritize empathy, equity, and opportunity, because we know that real balance starts with inclusion.
+            </p>
+            <p class="paragraph">
+            Whether you're joining us full-time, part-time, or remotely, your voice matters here.
+            </strong></p>
+        </div>
+
+
+        <div id="form">
+            <form id="employmentform" action="formsubmission.php" method="post" enctype="multipart/form-data" >
+                <label style="font-size: larger;font-weight:bold;color: white;"><h2>Join Us Now!</h2></label>
+
+                <input type="text" name="name" placeholder="Name*" required style="height:40px"> 
+
+                <input type="email" name="email" placeholder="Email*" style="height:40px" required>   
+
+                <input type="tel" id="phone" name="Phone Number*" placeholder="Enter your phone number" style="height:40px" required>
+
+                <textarea name=description rows="10" cols="40" placeholder="Brief Introduction of Yourself*"></textarea>
+
+                <label for="file" style="color: white;font-weight: bold;">Upload Your Resume:</label>
+                <input type="file" id="file" name="file" accept=".pdf,.docx,.doc" style="margin-top: 0;background-color: white;" required>
+
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+        </div>
+
+    </div>
+
+
+    <footer>
+        <p>&copy; 2025 Balance Works LLP. All rights reserved.</p>
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms of Service</a>
+    </footer>
+
+</body>
+
+</html>
