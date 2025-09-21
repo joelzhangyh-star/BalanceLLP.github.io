@@ -63,6 +63,19 @@
         text-decoration: none;
         transform: scale(1.1);
     }
+    #displayservices{
+        display: flex;        
+        left: 150px;
+        flex-wrap: wrap; 
+        justify-content: space-around;
+    }
+    .services{
+        width: 650px;
+        margin: 15px;
+        box-shadow: 5px 10px 5px grey;
+        text-align: center;
+        border-radius: 20px;
+    }
     footer{
         background-color: whitesmoke;
         margin-top: 50px;
@@ -75,7 +88,6 @@
         color: blue;
         text-decoration: none;
     }
-
     footer a:hover {
         text-decoration: underline;
     }
@@ -94,16 +106,21 @@
     </div>
 
     <main>
-    <div style="background-color: whitesmoke;">
-        <h2>Accounting and Bookkeeping (Monthly)</h2>
-        <h2>from SGD 350</h2>
-        <p>Tap on our services to record income and expenses on a monthly basis. We record your transactions into your designated software and reconcile your numbers monthly. 
+        <!--<div>
+            Possible search bar here
+            <button>Search function?</button>
+        </div>-->
+    <div id="displayservices">
+        <div style="background-color: whitesmoke;" class="services">
+            <h2>Accounting and Bookkeeping (Monthly)</h2>
+            <h2>from SGD 350</h2>
+            <p>Tap on our services to record income and expenses on a monthly basis. We record your transactions into your designated software and reconcile your numbers monthly. 
 
         Reach out to us for a customised quote according to your business needs.
-        </p>
-    </div>
+            </p>
+        </div>
 
-    <div style="background-color: whitesmoke;">
+        <div style="background-color: whitesmoke;" class="services">
         <h2>
             Good and Services Tax (GST) Registration / deregistration
         </h2>
@@ -113,9 +130,9 @@
         <p>
             Tap on our services to register / deregister your business for Good and Services Tax (GST).
         </p>
-    </div>
+        </div>
 
-    <div style="background-color: whitesmoke;">
+        <div style="background-color: whitesmoke;" class="services">
         <h2>
             Accounting and Bookkeeping (Yearly)
         </h2>
@@ -125,9 +142,9 @@
         <p>
             Tap on our accounting and bookkeeping services on a yearly basis. This is suitable for companies with low transactions or dormant companies.
         </p>
-    </div>
+        </div>
 
-    <div style="background-color: whitesmoke;">
+        <div style="background-color: whitesmoke;" class="services">
         <h2>
             Good and Services Tax (GST) Accounting and  E-Filing (Quarterly)
         </h2>
@@ -138,9 +155,9 @@
             Tap on our services to prepare and e-file GST Form 5 (F5).
 
         </p>
-    </div>
+        </div>
 
-    <div style="background-color: whitesmoke;">
+        <div style="background-color: whitesmoke;" class="services">
         <h2>
             Compilation of Unaudited Financial Statements
         </h2>
@@ -150,9 +167,9 @@
         <p>
             Tap on our services to prepare the annual financial statements based on your management accounts for ACRA filing purpose.
         </p>
-    </div>
+        </div>
 
-    <div style="background-color: whitesmoke;">
+        <div style="background-color: whitesmoke;" class="services">
         <h2>
             Good and Services Tax (GST) Compiling and  E-Filing (Quarterly)
         </h2>
@@ -164,7 +181,7 @@
         </p>
     </div>
 
-    <div style="background-color: whitesmoke;">
+    <div style="background-color: whitesmoke;" class="services">
         <h2>
             Add-On Services: Liaison with Auditor
         </h2>
@@ -176,7 +193,7 @@
         </p>
     </div>
 
-    <div style="background-color: whitesmoke;">
+    <div style="background-color: whitesmoke;" class="services">
         <h2>
             Preparation of XBRL
         </h2>
@@ -188,7 +205,7 @@
         </p>
     </div>
 
-    <div style="background-color: whitesmoke;">
+    <div style="background-color: whitesmoke;" class="services">
         <h2>
             Add-On Services: Accounting Software Setup (Xero)
         </h2>
@@ -200,7 +217,7 @@
         </p>
     </div>
 
-    <div style="background-color: whitesmoke;">
+    <div style="background-color: whitesmoke;" class="services"> 
         <h2>
             Other Services
         </h2>
@@ -209,13 +226,17 @@
         </p>
     </div>
 
+    </div>
+
     </main>
 
-    <footer>
-        <p>&copy; 2025 Balance Works LLP. All rights reserved.</p>
-        <a href="privacy.html">Privacy Policy</a> |
-        <a href="terms.html">Terms of Service</a>
-    </footer>
-
 </body>
+
+
+<footer>
+    <p>&copy; 2025 Balance Works LLP. All rights reserved.</p>
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms of Service</a>
+</footer>
+
 </html>
