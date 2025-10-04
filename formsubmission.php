@@ -1,12 +1,22 @@
 <?php
-
 echo "Form submission script is being executed!";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
+    // Collect and sanitize form data
     $name = htmlspecialchars($_POST['name']);
     $email = htmlspecialchars($_POST['email']);
-    $message = htmlspecialchars($_POST['message']);
+    $message = htmlspecialchars($_POST['description']);
+
+    // Validate email and phone number (simple validation)
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email format!";
+        exit;
+    }
+
+    if (!preg_match("/^[0-9]{10}$/", $_POST['Phone Number'])) {
+        echo "Invalid phone number format!";
+        exit;
+    }
 
     // Get file info
     $file = $_FILES['file'];
@@ -16,12 +26,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileError = $file['error'];
     $fileType = $file['type'];
 
+    // Allowed file types
+    $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    $maxFileSize = 5 * 1024 * 1024; // 5MB limit
+
     // Set the upload directory and file path
     $uploadDir = 'uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true); // Create directory if it doesn't exist
+    }
     $uploadFilePath = $uploadDir . basename($fileName);
 
-    // Check for upload errors
+    // Check for upload errors and validate file
     if ($fileError === 0) {
+        if (!in_array($fileType, $allowedTypes)) {
+            echo "Invalid file type!";
+            exit;
+        }
+
+        if ($fileSize > $maxFileSize) {
+            echo "File size exceeds the limit of 5MB!";
+            exit;
+        }
+
         if (move_uploaded_file($fileTmpName, $uploadFilePath)) {
             echo "File uploaded successfully.";
         } else {
@@ -34,9 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Email address where the form data will be sent
-    $to = "joelzhangyh@gmail.com"; // Replace with email
+    $to = "joelzhangyh@gmail.com"; // Replace with your email
     $subject = "New Message from $name";
-    $body = "You have received a new message.\n\nName: $name\nEmail: $email\nMessage:\n$message";
+    $body = "You have received a new message.\n\nName: $name\nEmail: $email\nPhone: {$_POST['Phone Number']}\nMessage:\n$message";
 
     // Headers for the email (multipart for attachment)
     $boundary = md5(time());
@@ -48,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emailBody = "--$boundary\r\n";
     $emailBody .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $emailBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $emailBody .= "Name: $name\nEmail: $email\nMessage: $message\r\n";
+    $emailBody .= "Name: $name\nEmail: $email\nPhone: {$_POST['Phone Number']}\nMessage: $message\r\n";
     
     // Add attachment
     $fileContent = chunk_split(base64_encode(file_get_contents($uploadFilePath)));
@@ -70,3 +97,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     unlink($uploadFilePath);
 }
 ?>
+
