@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Validate phone number (10 digits only)
-    if (!preg_match("/^[0-9]{10}$/", $phone)) {
+    if (!preg_match("/^[0-9]{8}$/", $phone)) {
         echo "Invalid phone number format!";
         exit;
     }
