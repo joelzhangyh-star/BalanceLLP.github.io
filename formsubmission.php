@@ -3,22 +3,33 @@ echo "<script>console.log('Form submission script is being executed!');</script>
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect and sanitize form data
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['Email']);
-    $message = htmlspecialchars($_POST['description']);
-    $phone = $_POST["PhoneNumber"];
+    // Check and sanitize each field
+    $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
+    $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
+    $message = isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '';
+    $phone = isset($_POST['phone_number']) ? trim($_POST['phone_number']) : '';
 
-    // Validate email and phone number (simple validation)
+    // Validate required fields
+    if (empty($name) || empty($email) || empty($message) || empty($phone)) {
+        echo "All fields are required.";
+        exit;
+    }
+
+    // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "Invalid email format!";
         exit;
     }
 
+    // Validate phone number (10 digits only)
     if (!preg_match("/^[0-9]{10}$/", $phone)) {
         echo "Invalid phone number format!";
         exit;
-}
+    }
+
+    // If everything is valid
+    echo "Form submitted successfully!";
+    // You could continue to save data, send email, etc.
 
     // Get file info
     $file = $_FILES['file'];
