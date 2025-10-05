@@ -1,11 +1,13 @@
 <?php
-echo "Form submission script is being executed!";
+echo "<script>console.log('Form submission script is being executed!');</script>";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize form data
     $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
+    $email = htmlspecialchars($_POST['Email']);
     $message = htmlspecialchars($_POST['description']);
+    $phone = $_POST["PhoneNumber"];
 
     // Validate email and phone number (simple validation)
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -13,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    if (!preg_match("/^[0-9]{10}$/", $_POST['Phone Number'])) {
+    if (!preg_match("/^[0-9]{10}$/", $phone)) {
         echo "Invalid phone number format!";
         exit;
-    }
+}
 
     // Get file info
     $file = $_FILES['file'];
@@ -97,4 +99,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     unlink($uploadFilePath);
 }
 ?>
-
