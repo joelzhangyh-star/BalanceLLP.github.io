@@ -1,13 +1,12 @@
 <?php
 echo "<script>console.log('Form submission script is being executed!');</script>";
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check and sanitize each field
     $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
     $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
     $message = isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '';
-    $phone = isset($_POST['phone_number']) ? trim($_POST['phone_number']) : '';
+    $phone = isset($_POST['phone_number']) ? trim($_POST['phone_number']) : ''; // Correct key for phone number
 
     // Validate required fields
     if (empty($name) || empty($email) || empty($message) || empty($phone)) {
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!preg_match("/^(\+65)?[689]\d{7}$/", $phone)) {
         echo "Invalid phone number format!";
         exit;
-}
+    }
 
     // If everything is valid
     echo "Form submitted successfully!";
@@ -76,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Email address where the form data will be sent
     $to = "joelzhangyh@gmail.com"; // Replace with your email
     $subject = "New Message from $name";
-    $body = "You have received a new message.\n\nName: $name\nEmail: $email\nPhone: {$_POST['Phone Number']}\nMessage:\n$message";
+    $body = "You have received a new message.\n\nName: $name\nEmail: $email\nPhone: $phone\nMessage:\n$message";
 
     // Headers for the email (multipart for attachment)
     $boundary = md5(time());
@@ -88,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emailBody = "--$boundary\r\n";
     $emailBody .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $emailBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $emailBody .= "Name: $name\nEmail: $email\nPhone: {$_POST['Phone Number']}\nMessage: $message\r\n";
+    $emailBody .= "Name: $name\nEmail: $email\nPhone: $phone\nMessage: $message\r\n";
     
     // Add attachment
     $fileContent = chunk_split(base64_encode(file_get_contents($uploadFilePath)));
