@@ -1,12 +1,16 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
+
 echo "<script>console.log('Form submission script is being executed!');</script>";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check and sanitize each field
-    $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
-    $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
-    $message = isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '';
-    $phone = isset($_POST['phone_number']) ? trim($_POST['phone_number']) : ''; // Correct key for phone number
+    $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
+    $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
+    $message = isset($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : '';
+    $phone = isset($_POST['phone_number']) ? trim($_POST['phone_number']) : '';
 
     // Validate required fields
     if (empty($name) || empty($email) || empty($message) || empty($phone)) {
@@ -20,17 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Validate phone number (10 digits only)
+    // Validate phone number (Singapore format)
     if (!preg_match("/^(\+65)?[689]\d{7}$/", $phone)) {
         echo "Invalid phone number format!";
         exit;
     }
 
-    // If everything is valid
-    echo "Form submitted successfully!";
-    // You could continue to save data, send email, etc.
+    echo "Form submitted successfully!<br>";
 
-    // Get file info
+    // File upload
     $file = $_FILES['file'];
     $fileName = $file['name'];
     $fileTmpName = $file['tmp_name'];
@@ -38,18 +40,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileError = $file['error'];
     $fileType = $file['type'];
 
-    // Allowed file types
-    $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    $maxFileSize = 5 * 1024 * 1024; // 5MB limit
+    $allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    $maxFileSize = 5 * 1024 * 1024;
 
-    // Set the upload directory and file path
     $uploadDir = 'uploads/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true); // Create directory if it doesn't exist
+        mkdir($uploadDir, 0777, true);
     }
-    $uploadFilePath = $uploadDir . basename($fileName);
+    $uploadFilePath = $uploadDir . uniqid('', true) . '-' . basename($fileName);
 
-    // Check for upload errors and validate file
     if ($fileError === 0) {
         if (!in_array($fileType, $allowedTypes)) {
             echo "Invalid file type!";
@@ -57,12 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($fileSize > $maxFileSize) {
-            echo "File size exceeds the limit of 5MB!";
+            echo "File size exceeds the 5MB limit!";
             exit;
         }
 
         if (move_uploaded_file($fileTmpName, $uploadFilePath)) {
-            echo "File uploaded successfully.";
+            echo "File uploaded successfully.<br>";
         } else {
             echo "Error uploading file.";
             exit;
@@ -72,40 +75,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Email address where the form data will be sent
-    $to = "joelzhangyh@gmail.com"; // Replace with your email
-    $subject = "New Message from $name";
-    $body = "You have received a new message.\n\nName: $name\nEmail: $email\nPhone: $phone\nMessage:\n$message";
+    // Send email via PHPMailer
+    $mail = new PHPMailer(true);
 
-    // Headers for the email (multipart for attachment)
-    $boundary = md5(time());
-    $headers = "From: $email\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
-    
-    // Body of the email
-    $emailBody = "--$boundary\r\n";
-    $emailBody .= "Content-Type: text/plain; charset=UTF-8\r\n";
-    $emailBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $emailBody .= "Name: $name\nEmail: $email\nPhone: $phone\nMessage: $message\r\n";
-    
-    // Add attachment
-    $fileContent = chunk_split(base64_encode(file_get_contents($uploadFilePath)));
-    $emailBody .= "--$boundary\r\n";
-    $emailBody .= "Content-Type: $fileType; name=\"$fileName\"\r\n";
-    $emailBody .= "Content-Disposition: attachment; filename=\"$fileName\"\r\n";
-    $emailBody .= "Content-Transfer-Encoding: base64\r\n\r\n";
-    $emailBody .= $fileContent . "\r\n";
-    $emailBody .= "--$boundary--";
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = getenv('SMTP_USER');
+        $mail->Password = getenv('SMTP_PASS');
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-    // Send the email
-    if (mail($to, $subject, $emailBody, $headers)) {
+        $mail->setFrom('joelzhangyh@gmail.com', 'Website Form');
+        $mail->addReplyTo($email, $name);
+        $mail->addAddress('joelzhangyh@gmail.com');
+
+        $mail->Subject = "New Message from $name";
+        $mail->Body = "Name: $name\nEmail: $email\nPhone: $phone\nMessage:\n$message";
+        $mail->addAttachment($uploadFilePath, $fileName);
+
+        $mail->send();
         echo "Message sent successfully!";
-    } else {
-        echo "Message could not be sent. Please try again.";
+    } catch (Exception $e) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
     }
 
-    // Optionally delete the uploaded file after email is sent
+    // Delete uploaded file after sending
     unlink($uploadFilePath);
 }
 ?>
